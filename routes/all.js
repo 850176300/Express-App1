@@ -102,6 +102,9 @@ router.get('/login', function(req, res, next) {
         console.log("-----------statusCode-------------------",res.statusCode);
 
         console.log("-----------socket-------------------",res.socket);
+        res.on('data', function(data){
+            console.log("---------------data----------------", data)
+        });
     })
 
     req.write(content)
