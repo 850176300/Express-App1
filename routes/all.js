@@ -90,7 +90,18 @@ router.get('/login', function(req, res, next) {
         }
     }
     var req = require(isHttp?'http':'https').request(options, function(res){
-        console.log("--------------res-------------", res)
+        console.log("-----------httpVersion-------------------",res.httpVersion);
+        console.log("-----------headers-------------------",res.headers);
+
+        console.log("-----------trainers-------------------",res.trainers);
+
+        console.log("-----------method-------------------",res.method);
+
+        console.log("-----------url-------------------",res.url);
+
+        console.log("-----------statusCode-------------------",res.statusCode);
+
+        console.log("-----------socket-------------------",res.socket);
     })
 
     req.write(content)
