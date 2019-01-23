@@ -3,6 +3,8 @@ var router = express.Router();
 var bodyParser = require('body-parser')
 var app = express();
 var URL = require('url');
+var http = require('http')
+var querystring = require('querystring')
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -17,12 +19,36 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
- 
     var params = req.body;
+    var postUrl = URL.parse('https://api.weixin.qq.com/sns/jscode2session', true)
+    var isHttp = postUrl.protocol == 'http:'
+    var datas = {
+        appid:params.appid,
+        secret:'8a2e1506b2ff816b828ec6905598ca49',
+        js_code:params.code,
+        grant_type:'authorization_code'
+    }
+    var content = querystring.stringify(datas)
+    var options = {
+        host:postUrl.hostname,
+        port:postUrl.port || (isHttp ? 80:443),
+        path:postUrl.path,
+        method:'POST',
+        headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length':content.length
+        }
+    }
+    var req = require(isHttp?'http':'https').request(options, function(res){
+        console.log("--------------res-------------", res)
+    })
+
+    req.write(content)
+    req.end()
+    
  
     var user = {}
-    user.u = params.username
-    var response = {status:1,data:user};
+    var response = {status:1,data:"user"};
     res.send(JSON.stringify(response));
  
 });
