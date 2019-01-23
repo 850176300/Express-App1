@@ -40,18 +40,18 @@ router.post('/login', function(req, res, next) {
         }
     }
     var req = require(isHttp?'http':'https').request(options, function(res){
-        console.log(res.httpVersion);
-        console.log(res.headers);
+        console.log("-----------httpVersion-------------------",res.httpVersion);
+        console.log("-----------headers-------------------",res.headers);
 
-        console.log(res.trainers);
+        console.log("-----------trainers-------------------",res.trainers);
 
-        console.log(res.method);
+        console.log("-----------method-------------------",res.method);
 
-        console.log(res.url);
+        console.log("-----------url-------------------",res.url);
 
-        console.log(res.statusCode);
+        console.log("-----------statusCode-------------------",res.statusCode);
 
-        console.log(res.socket);
+        console.log("-----------socket-------------------",res.socket);
 
     })
 
