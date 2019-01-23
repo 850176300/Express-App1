@@ -102,6 +102,7 @@ router.get('/login', function(req, res, next) {
         console.log("-----------statusCode-------------------",res.statusCode);
 
         console.log("-----------socket-------------------",res.socket);
+        res.setEncoding('utf8')
         res.on('data', function(data){
             console.log("---------------data----------------", data)
         });
