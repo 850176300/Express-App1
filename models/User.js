@@ -6,10 +6,12 @@ User.prototype.findUser = function(openId, callback){
     var sql = 'select * from userTB where openId = ?'
     db.pool.getConnection(function(err, connection){
         if (err){
+            console.log('----------------err-----------', err)
             callback({code:400})
         }else {
             connection.query(sql, [openId], function(err, result){
                 if (err){
+                    console.log('----------------err-----------', err)
                     callback({code: 401})
                 }else {
                     var resultArr = JSON.parse(JSON.stringify(result));

@@ -122,6 +122,7 @@ router.get('/register', function(req, res, next){
 router.get('/insertInvite', function(req, res, next){
     var params = URL.parse(req.url, true).query;
     var user = new User();
+    console.log("------insertInvite-----------", params)
     if (params.parentId && params.inviteId){
         user.insertInviteUser(params.parentId, params.inviteId, function(data){
             res.send(JSON.stringify(data))
