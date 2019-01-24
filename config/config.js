@@ -3,7 +3,7 @@ module.exports = {
         host: '45.76.134.139',
         user: 'root',
         password: 'Darli0912',
-        database: 'app_user',
+        database: 'app1_db',
         connectionLimit: 10,
         supportBigNumbers: true
     }
