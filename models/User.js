@@ -6,7 +6,6 @@ User.prototype.findUser = function(openId, callback){
     var sql = 'select * from userTB where openId = ?'
     db.pool.getConnection(function(err, connection){
         if (err){
-            console.log('----------------err-----------', err)
             callback({code:400})
         }else {
             connection.query(sql, [openId], function(err, result){
@@ -50,7 +49,6 @@ User.prototype.registUser = function(openId, nickname, avatarUrl, parentId, call
 }
 
 User.prototype.insertInviteUser = function(parentId, inviteId, callback){
-    var a = 0;
     var sql = 'CALL InsertInvite(?,?,@a)'
     db.pool.getConnection(function(err, connection){
         if (err){
@@ -62,6 +60,8 @@ User.prototype.insertInviteUser = function(parentId, inviteId, callback){
                     console.log(err)
                     callback({code:401})
                 }else {
+                    var resultArr = JSON.parse(JSON.stringify(result[0]));
+                    console.log("-----------resultArr---------", resultArr)
                     callback({code:200})
                 }
             })
@@ -111,19 +111,20 @@ User.prototype.getInvitedUsers = function(userId, callback){
 }
 
 User.prototype.collectionRewards = function(userId, callback){
-    var a = 0;
     var sql = 'CALL OneCollection(?,@a)'
     db.pool.getConnection(function(err, connection){
         if (err){
             callback({code:400})
         }else {
-            connection.query(sql, [userId], function(err, result){
+            
+            connection.query(sql, [userId], function(err, rows){
                 if (err){
                     console.log(err)
                     callback({code:401})
                 }else {
-                    console.log('-------------result------------', result)
-                    callback({code:200, rose:a})
+                    var resultArr = JSON.parse(JSON.stringify(rows[0]));
+                    console.log("------------resultArr---------", resultArr)
+                    callback({code:200, rose:resultArr[0].totalRose})
                 }
             })
         }
