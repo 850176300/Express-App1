@@ -78,7 +78,7 @@ router.get('/login', function(req, res, next) {
         }
     }
     var req = require(isHttp?'http':'https').request(options, function(pres){
-        pres.setEncoding('utf8')
+        // pres.setEncoding('utf8')
         pres.on('data', function(data){
             console.log("---------------data----------------", data)
             res.send(data)
