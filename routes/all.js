@@ -102,14 +102,14 @@ router.get('/register', function(req, res, next){
                 isNewUser = true;
                 user.registUser(params.openId, params.nickName, params.avatar, params.parentId ? parseInt(params.parentId) : 0, function(data2){
                     if (data2.code == 200){
-                        res.send(JSON.stringify({code:200, userId:data2.id}))
+                        res.send(JSON.stringify({code:200, userId:data2.id, newUser:true}))
                         userId = data2.id
                     }else {
                         res.send(JSON.stringify({code:data2.code}))
                     }
                 })
             }else {
-                res.send(JSON.stringify({code:200, userId:data.data.id}))
+                res.send(JSON.stringify({code:200, userId:data.data.id, newUser:true}))
                 userId = data.data.id
             }
         }else {
