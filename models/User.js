@@ -117,12 +117,12 @@ User.prototype.collectionRewards = function(userId, callback){
         if (err){
             callback({code:400})
         }else {
-            
             connection.query(sql, [userId], function(err, result){
                 if (err){
                     console.log(err)
                     callback({code:401})
                 }else {
+                    console.log('-------------result------------', result)
                     callback({code:200, rose:a})
                 }
             })
