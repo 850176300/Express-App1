@@ -5,6 +5,7 @@ var app = express();
 var URL = require('url');
 var http = require('http')
 var querystring = require('querystring')
+var User = require('../models/User')
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -39,29 +40,16 @@ router.post('/login', function(req, res, next) {
             'Content-Length':content.length
         }
     }
-    var req = require(isHttp?'http':'https').request(options, function(res){
-        console.log("-----------httpVersion-------------------",res.httpVersion);
-        console.log("-----------headers-------------------",res.headers);
-
-        console.log("-----------trainers-------------------",res.trainers);
-
-        console.log("-----------method-------------------",res.method);
-
-        console.log("-----------url-------------------",res.url);
-
-        console.log("-----------statusCode-------------------",res.statusCode);
-
-        console.log("-----------socket-------------------",res.socket);
-
+    var req = require(isHttp?'http':'https').request(options, function(pres){
+        pres.setEncoding('utf8')
+        pres.on('data', function(data){
+            console.log("---------------data----------------", data)
+            res.send(data)
+        });
     })
 
     req.write(content)
     req.end()
-    
- 
-    var user = {}
-    var response = {status:1,data:"user"};
-    res.send(JSON.stringify(response));
  
 });
 
@@ -89,32 +77,97 @@ router.get('/login', function(req, res, next) {
             'Content-Length':content.length
         }
     }
-    var req = require(isHttp?'http':'https').request(options, function(res){
-        console.log("-----------httpVersion-------------------",res.httpVersion);
-        console.log("-----------headers-------------------",res.headers);
-
-        console.log("-----------trainers-------------------",res.trainers);
-
-        console.log("-----------method-------------------",res.method);
-
-        console.log("-----------url-------------------",res.url);
-
-        console.log("-----------statusCode-------------------",res.statusCode);
-
-        console.log("-----------socket-------------------",res.socket);
-        res.setEncoding('utf8')
-        res.on('data', function(data){
+    var req = require(isHttp?'http':'https').request(options, function(pres){
+        pres.setEncoding('utf8')
+        pres.on('data', function(data){
             console.log("---------------data----------------", data)
+            res.send(data)
         });
+       
     })
 
     req.write(content)
     req.end()
  
-    var response = {status:2,data:"user"};
-    res.send(JSON.stringify(response));
- 
 });
+
+router.get('/register', function(req, res, next){
+    var params = URL.parse(req.url, true).query;
+    var user = new User();
+    var userId = 0;
+    var isNewUser = false;
+    user.findUser(params.openId, function(data){
+        if (data.code == 200){
+            if (data.contain == false){
+                isNewUser = true;
+                user.registUser(params.openId, params.nickName, params.avatar, params.parentId ? parseInt(params.parentId) : 0, function(data2){
+                    if (data2.code == 200){
+                        res.send(JSON.stringify({code:200, userId:data2.id}))
+                        userId = data2.id
+                    }else {
+                        res.send(JSON.stringify({code:data2.code}))
+                    }
+                })
+            }else {
+                res.send(JSON.stringify({code:200, userId:data.data.id}))
+                userId = data.data.id
+            }
+        }else {
+            res.send(JSON.stringify({code:data.code}))
+        }
+    })
+    
+});
+
+router.get('/insertInvite', function(req, res, next){
+    var params = URL.parse(req.url, true).query;
+    var user = new User();
+    if (params.parentId && params.inviteId){
+        user.insertInviteUser(params.parentId, params.inviteId, function(data){
+            res.send(JSON.stringify(data))
+        })
+    }else {
+        res.send(JSON.stringify({code:500}))
+    }
+    
+})
+
+
+router.get('/userInfo', function(req, res, next){
+    var params = URL.parse(req.url, true).query;
+    var user = new User();
+    if (params.userId){
+        user.getUserInfo(params.userId, function(data){
+            res.send(JSON.stringify(data))
+        })
+    }else {
+        res.send(JSON.stringify({code:500}))
+    }
+})
+
+router.get('/getInviteInfo', function(req, res, next){
+    var params = URL.parse(req.url, true).query;
+    var user = new User();
+    if (params.userId){
+        user.getInvitedUsers(params.userId, function(data){
+            res.send(JSON.stringify(data))
+        })
+    }else {
+        res.send(JSON.stringify({code:500}))
+    }
+})
+
+router.get('/collectionRewards', function(req, res, next){
+    var params = URL.parse(req.url, true).query;
+    var user = new User();
+    if (params.userId){
+        user.collectionRewards(params.userId, function(data){
+            res.send(JSON.stringify(data))
+        })
+    }else {
+        res.send(JSON.stringify({code:500}))
+    }
+})
  
 
 app.use('/', router)
