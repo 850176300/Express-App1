@@ -7,9 +7,8 @@ var http = require('http')
 var crypto = require('crypto');
 var querystring = require('querystring')
 var User = require('../models/User')
-var md5 = crypto.createHash('md5');
 var urlencode = require('urlencode')
-
+var Buffer = require("buffer").Buffer;
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -182,7 +181,9 @@ router.get('/getpois', function(req, res, next){
     })
     str += 'geotable_id=202292&output=json&ak=lkm66St21BIVIOyXS7NcihuCa8zE2SaG'
     var snStr = str + 'nFlqiinVN45hbRngLjgO0cjcTDztKLBg'
-    var sn = md5.update(snStr).digest('hex');
+    var buf = new Buffer(snStr);
+    var bstr = buf.toString("binary");
+    var sn = crypto.createHash("md5").update(bstr).digest("hex");
     str += '&sn='+sn;
     var lbsUrl = 'http://api.map.baidu.com' + str;
     console.log('----lbsUrl-----', lbsUrl)
