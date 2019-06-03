@@ -186,7 +186,7 @@ router.get('/getpois', function(req, res, next){
     str += '&sn='+sn;
     var lbsUrl = 'http://api.map.baidu.com/geosearch/v2/bound?' + str;
     var parsedUrl = URL.parse(lbsUrl, true)
-    var isHttp = postUrl.protocol == 'http:'
+    var isHttp = parsedUrl.protocol == 'http:'
     var options = {
         host:parsedUrl.hostname,
         port:parsedUrl.port || (isHttp ? 80:443),
