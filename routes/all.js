@@ -4,8 +4,11 @@ var bodyParser = require('body-parser')
 var app = express();
 var URL = require('url');
 var http = require('http')
+var crypto = require('crypto');
 var querystring = require('querystring')
 var User = require('../models/User')
+var md5 = crypto.createHash('md5');
+var urlencode = require('urlencode')
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -168,6 +171,37 @@ router.get('/collectionRewards', function(req, res, next){
     }else {
         res.send(JSON.stringify({code:500}))
     }
+})
+
+router.get('/getpois', function(req, res, next){
+    var params = URL.parse(req.url, true).query;
+    var str = ''
+    Object.keys(params).forEach(function(key){
+        str += key + '='
+        str += urlencode(params[key])+'&'
+    })
+    str += 'geotable_id=202292&output=json&ak=lkm66St21BIVIOyXS7NcihuCa8zE2SaG'
+    var snStr = str + 'nFlqiinVN45hbRngLjgO0cjcTDztKLBg'
+    var sn = md5.update(snStr).digest('hex');
+    str += '&sn='+sn;
+    var lbsUrl = 'http://api.map.baidu.com/geosearch/v2/bound?' + str;
+    var parsedUrl = URL.parse(lbsUrl, true)
+    var isHttp = postUrl.protocol == 'http:'
+    var options = {
+        host:parsedUrl.hostname,
+        port:parsedUrl.port || (isHttp ? 80:443),
+        path:parsedUrl.path,
+        method:'GET',
+    }
+    var req = require(isHttp?'http':'https').request(options, function(pres){
+        // pres.setEncoding('utf8')
+        pres.on('data', function(data){
+            console.log("---------------data----------------", data)
+            res.send(data)
+        });
+       
+    })
+    req.end()
 })
  
 
