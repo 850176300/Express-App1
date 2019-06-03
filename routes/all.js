@@ -201,6 +201,7 @@ router.get('/getpois', function(req, res, next){
         // pres.setEncoding('utf8')
         pres.on('data', function(data){
             console.log("---------------data----------------", data)
+            res.set('Content-Type', 'text/html');
             res.send(data)
         });
        
