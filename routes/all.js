@@ -184,7 +184,7 @@ router.get('/getpois', function(req, res, next){
     console.log('-----snStr--------', snStr)
     var buf = new Buffer.from(snStr);
     var bstr = buf.toString("binary");
-    var sn = crypto.createHash("md5").update(bstr).digest("hex");
+    var sn = crypto.createHash("md5WithRSAEncryption").update(bstr).digest("hex");
     str += '&sn='+sn;
     var lbsUrl = 'http://api.map.baidu.com' + str;
     console.log('----lbsUrl-----', lbsUrl)
