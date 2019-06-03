@@ -181,6 +181,7 @@ router.get('/getpois', function(req, res, next){
     })
     str += 'geotable_id=202292&output=json&ak=lkm66St21BIVIOyXS7NcihuCa8zE2SaG'
     var snStr = str + 'nFlqiinVN45hbRngLjgO0cjcTDztKLBg'
+    console.log('-----snStr--------', snStr)
     var buf = new Buffer.from(snStr);
     var bstr = buf.toString("binary");
     var sn = crypto.createHash("md5").update(bstr).digest("hex");
