@@ -193,6 +193,9 @@ router.get('/getpois', function(req, res, next){
         port:parsedUrl.port || (isHttp ? 80:443),
         path:parsedUrl.path,
         method:'GET',
+        headers:{
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
     }
     var req = require(isHttp?'http':'https').request(options, function(pres){
         // pres.setEncoding('utf8')
