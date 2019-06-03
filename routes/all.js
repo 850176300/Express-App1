@@ -175,7 +175,7 @@ router.get('/collectionRewards', function(req, res, next){
 
 router.get('/getpois', function(req, res, next){
     var params = URL.parse(req.url, true).query;
-    var str = ''
+    var str = '/geosearch/v2/bound?'
     Object.keys(params).forEach(function(key){
         str += key + '='
         str += urlencode(params[key])+'&'
@@ -184,7 +184,8 @@ router.get('/getpois', function(req, res, next){
     var snStr = str + 'nFlqiinVN45hbRngLjgO0cjcTDztKLBg'
     var sn = md5.update(snStr).digest('hex');
     str += '&sn='+sn;
-    var lbsUrl = 'http://api.map.baidu.com/geosearch/v2/bound?' + str;
+    var lbsUrl = 'http://api.map.baidu.com' + str;
+    console.log('----lbsUrl-----', lbsUrl)
     var parsedUrl = URL.parse(lbsUrl, true)
     var isHttp = parsedUrl.protocol == 'http:'
     var options = {
